@@ -9,10 +9,16 @@ class Mojang():
 
     @classmethod
     def get_uuid(self,playername:str):
-        r=requests.get('%s/users/profiles/minecraft/%s'%(self.MojangAPIURL,playername)).json()
-        UUID = r['id']
-
-        return UUID
+        try:
+            r=requests.get('%s/users/profiles/minecraft/%s'%(self.MojangAPIURL,playername))
+            if r.status_code==204 or r.status_code==400:
+                pass
+            else:
+                i=r.json
+                UUID = i['id']
+                return UUID
+        except Exception as e:
+            pass
     
     @classmethod
     def get_playername_history(self,uuid:str=None,playername:str=None):
